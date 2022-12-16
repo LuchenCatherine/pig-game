@@ -75,6 +75,7 @@ body.dark-theme .wrapper {
 
 
 
+
 /**********************************************
 *** PLAYERS
 **********************************************/
@@ -99,6 +100,15 @@ body.dark-theme .wrapper {
     margin-bottom: 30px;
 }
 
+.player-1-score {
+    text-align: center;
+    font-size: 80px;
+    font-weight: 100;
+    color: #4baddb;
+    margin-bottom: 30px;
+}
+
+
 .active { background-color: #f7f7f7; }
 body.dark-theme .active { background-color: #333; }
 .active .player-name { font-weight: 300; }
@@ -115,6 +125,15 @@ body.dark-theme .active { background-color: #333; }
 
 .player-current-box {
     background-color: #EB4D4D;
+    color: #fff;
+    width: 40%;
+    margin: 0 auto;
+    padding: 12px;
+    text-align: center;
+}
+
+.player-1-current-box {
+    background-color: #4baddb;
     color: #fff;
     width: 40%;
     margin: 0 auto;

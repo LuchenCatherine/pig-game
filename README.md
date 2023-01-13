@@ -1,1 +1,2 @@
-# pig-game
+# pig-game-heroku
+pig game

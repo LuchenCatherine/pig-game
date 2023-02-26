@@ -148,6 +148,7 @@ let playersParam = parseInt(urlParams.get('players'));
 let numPlayers = 2;
 let players = [];
 let uiElements = [];
+let winnerPlayer = -1;
 
 createPlayerPanel();
 
@@ -209,6 +210,7 @@ function newGame() {
     activeScores = 0;
     activePlayer = 0;
     doubleSix = false;
+    winnerPlayer = -1;
 
     players.forEach((player, index) => {player.setScore(0);});
     uiElements.forEach((playerUIElements, index) => {
@@ -218,7 +220,10 @@ function newGame() {
 
     document.querySelectorAll('.player-panel').forEach(e => e.classList.remove('active', 'winner'));
     document.querySelector('.player-0-panel').classList.add('active');
-    document.querySelector('.dice').style.display = 'none';
+    // document.querySelector('.dice').style.display = 'none';
+    const dice = document.querySelectorAll('.dice');
+    dice.forEach(die => die.style.display = 'none');
+
     document.getElementById('score-goal-box').readOnly = false;
 
     selectModeDifficulty();
@@ -377,6 +382,7 @@ function checkWinner() {
             names[i].innerHTML = names[i].innerHTML + " Win!";
             uiElements[i].winnerPanel.classList.add('winner', 'active');
             // alert(`${player.getName()} is winner`);
+            winnerPlayer = i;
             gameOver();
 
             return true;
@@ -396,18 +402,21 @@ function checkWinner_simul() {
         names[1].innerHTML = 'Draw';
         uiElements[0].winnerPanel.classList.add('winner', 'active');
         uiElements[1].winnerPanel.classList.add('winner', 'active');
+        winnerPlayer = 2;
         gameOver();
         return true;
     }
     else if (human_score >= goal) {
         names[0].innerHTML = names[0].innerHTML + " Win!";
         uiElements[0].winnerPanel.classList.add('winner', 'active');
+        winnerPlayer = 0;
         gameOver();
         return true;
     }
     else if (machine_score >= goal) {
         names[1].innerHTML = names[1].innerHTML + " Win!";
         uiElements[1].winnerPanel.classList.add('winner', 'active');
+        winnerPlayer = 1;
         gameOver();
         return true;
     }
@@ -418,6 +427,18 @@ function checkWinner_simul() {
 function gameOver() {
     document.querySelector('.btn-roll').removeEventListener('click', currentEventListenerRoll);
     document.querySelector('.btn-hold').removeEventListener('click', currentEventListenerHold);
+
+    // human win
+    if (winnerPlayer === 0)
+        bar_human.animate(1.0);
+    // machine win
+    else if (winnerPlayer === 1)
+        bar_machine.animate(1.0);
+    // draw
+    else {
+        bar_human.animate(1.0);
+        bar_machine.animate(1.0);
+    }
 }
 
 function changeActiveState() {
@@ -618,8 +639,8 @@ function hold_simultaneous() {
         uiElements[1].total.textContent = newScoreMachine.toString();
         uiElements[1].current.textContent = '0';
 
-        bar_human.animate(newScoreHuman/100.0);
-        bar_machine.animate(newScoreMachine/100.0);
+        bar_human.animate(Math.min(1.0, newScoreHuman/100.0));
+        bar_machine.animate(Math.min(1.0, newScoreMachine/100.0));
 
         if (!hasWinner) nextPlayer_simultaneous();
 
